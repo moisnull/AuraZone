@@ -53,7 +53,7 @@ namespace AuraZoneAPI.Presentation.Controllers
             _userRepository.AddUser(newUser);
             return Ok(newUser);
         }
-        [HttpPatch("{id:guid}")] //fixme: it's not really patching the new data, needs a fix. 
+        [HttpPatch("{id:guid}")]
         public IActionResult EditUser(Guid id, [FromBody] JsonPatchDocument<User> patchDoc)
         {
             if (patchDoc == null)
