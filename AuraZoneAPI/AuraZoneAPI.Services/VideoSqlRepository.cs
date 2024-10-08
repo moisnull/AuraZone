@@ -11,13 +11,15 @@ namespace AuraZoneAPI.Services
     public class VideoSqlRepository : IVideoRepository
     {
         private readonly DataContext _dataContext;
-        public VideoSqlRepository(DataContext dataContext)
+        private readonly IUserRepository _userRepository;
+        public VideoSqlRepository(IUserRepository userRepository ,DataContext dataContext)
         {
+            _userRepository = userRepository;
             _dataContext = dataContext;
         }
-        public IQueryable<Video> GetAllVideos()
+        public IQueryable<Video> GetVideosByCategory(string category)
         {
-            return _dataContext.Videos;
+            return _dataContext.Videos.Where(d => d.Category == category);
         }
         public Video GetVideoById(Guid id)
         {
@@ -27,10 +29,16 @@ namespace AuraZoneAPI.Services
         {
             return (IQueryable<Video>)_dataContext.Videos.Select(d => d.User.Id == userId);
         }
-        public void AddVideo(User user, Video video)
+        public void AddVideo(Guid userId, Video video)
         {
-            video.User = user;
+            User user = _userRepository.GetById(userId);
+            if (user == null)
+            {
+                return;
+            }
+            user.Videos.Add(video);
             _dataContext.Videos.Add(video);
+            _dataContext.Users.Update(user);
             _dataContext.SaveChanges();
         }
         public void UpdateVideo(Guid id)
@@ -39,9 +47,15 @@ namespace AuraZoneAPI.Services
             _dataContext.Update(video);
             _dataContext.SaveChanges();
         }
-        public void DeleteVideo(Guid id)
+        public void DeleteVideo(Guid userId, Guid id)
         {
+            User user = _userRepository.GetById(userId);
+            if (user == null)
+            {
+                return;
+            }
             Video video = GetVideoById(id);
+            user.Videos.Remove(video);
             _dataContext.Remove(video);
             _dataContext.SaveChanges();
         }

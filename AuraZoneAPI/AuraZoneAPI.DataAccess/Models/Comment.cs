@@ -14,14 +14,16 @@ namespace AuraZoneAPI.DataAccess.Models
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public Guid UserId { get; set; }
+        public string Content { get; set; } = string.Empty;
         [Required]
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        [Required]
+        [ForeignKey("VideoId")]
         public Guid VideoId { get; set; }
-        [Required]
-        string Content { get; set; } = string.Empty;
-        [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public Video Video { get; set; } = null!;
+        [Required]
+        [ForeignKey("UserId")]
+        public Guid UserId { get; set; }
         public User User { get; set; } = null!;
     }
 }

@@ -19,7 +19,8 @@ namespace AuraZoneAPI.DataAccess.Models
         public string Email { get; set; } = string.Empty;
         [Required]
         public string PasswordHashed { get; set; } = string.Empty;
-        public ICollection<Video> Videos { get; set; } = null!;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public ICollection<Video> Videos { get; set; } = new List<Video>();
         public ICollection<Comment> Comments { get; set; } = null!;
     }
 }

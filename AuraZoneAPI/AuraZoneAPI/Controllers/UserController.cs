@@ -34,7 +34,6 @@ namespace AuraZoneAPI.Presentation.Controllers
             var user = _userRepository.GetByUsername(username);
             return Ok(user);
         }
-
         [HttpPost]
         public IActionResult AddUser(string username, string email, string password)
         {
@@ -44,7 +43,8 @@ namespace AuraZoneAPI.Presentation.Controllers
                 Id = Guid.NewGuid(),
                 Username = username,
                 Email = email,
-                PasswordHashed = password
+                PasswordHashed = password,
+                CreatedAt = DateTime.UtcNow
             };
             if (newUser == null)
             {
