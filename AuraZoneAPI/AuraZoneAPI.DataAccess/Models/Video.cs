@@ -17,9 +17,6 @@ namespace AuraZoneAPI.DataAccess.Models
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
         [Required]
-        [Url]
-        public string Url { get; set; } = string.Empty;
-        [Required]
         [StringLength(20)]
         public string Category { get; set; } = string.Empty;
         [Url]
@@ -32,7 +29,7 @@ namespace AuraZoneAPI.DataAccess.Models
         public Guid UserId { get; set; }
         [Required]
         public User User { get; set; } = null!;
-        public ICollection<Comment>? Comments { get; set; } = null!;
+        public ICollection<Comment> Comments { get; set; } = null!;
 
     }
 }

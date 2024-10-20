@@ -25,20 +25,28 @@ namespace AuraZoneAPI.Presentation.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetUserById(Guid id)
         {
-            var user = _userRepository.GetById(id);
+            if (!_userRepository.UserExists(id))
+            {
+                return NotFound("User not found.");
+            }
+            User user = _userRepository.GetById(id);
             return Ok(user);
         }
         [HttpGet("{username}")]
         public IActionResult GetUserByUsername(string username)
         {
+            if (!_userRepository.UserExists(username))
+            {
+                return NotFound("User not found.");
+            }
             var user = _userRepository.GetByUsername(username);
             return Ok(user);
         }
-        [HttpPost]
+        [HttpPost("{username}, {email}, {password}")]
         public IActionResult AddUser(string username, string email, string password)
         {
 
-            User newUser = new User
+            User newUser = new()
             {
                 Id = Guid.NewGuid(),
                 Username = username,
@@ -101,7 +109,7 @@ namespace AuraZoneAPI.Presentation.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
             return Ok();
         }

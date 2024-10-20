@@ -21,8 +21,6 @@ namespace AuraZoneAPI.DataAccess.ModelsConfigurations
 
             builder.Property(x => x.Name).HasColumnType("VARCHAR(200)").IsRequired();
 
-            builder.Property(x => x.Url).HasColumnType("VARCHAR(200)").IsRequired();
-
             builder.Property(x => x.Category).HasColumnType("VARCHAR(200)").IsRequired();
 
             builder.Property(x => x.ThumbnailUrl).HasColumnType("VARCHAR(200)");
@@ -31,11 +29,10 @@ namespace AuraZoneAPI.DataAccess.ModelsConfigurations
 
             builder.Property(x => x.CreatedAt).HasDefaultValueSql("GETDATE()").IsRequired();
 
-            // No cascading delete from User to Video
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Videos)
                 .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Restrict);  // Prevent cascading delete from User to Video
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AuraZoneAPI.DataAccess;
 using AuraZoneAPI.DataAccess.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AuraZoneAPI.Services
 {
@@ -15,9 +16,13 @@ namespace AuraZoneAPI.Services
         {
             _dataContext = dataContext;
         }
+        public Comment GetCommentById(Guid id)
+        {
+            return _dataContext.Comments.FirstOrDefault(b => b.Id == id);
+        }
         public IQueryable<Comment> GetVideoComments(Guid videoId)
         {
-            return (IQueryable<Comment>)_dataContext.Comments.Single(b => b.Video.Id == videoId);
+            return _dataContext.Comments.Where(b => b.Video.Id == videoId);
         }
         public void AddComment(Video video, User user, Comment comment)
         {
@@ -25,6 +30,10 @@ namespace AuraZoneAPI.Services
             comment.User = user;
             _dataContext.Comments.Add(comment);
             _dataContext.SaveChanges();
+        }
+        public bool CommentExists(Guid id)
+        {
+            return _dataContext.Comments.Any(b => b.Id == id);
         }
         public void UpdateComment(Guid id)
         {

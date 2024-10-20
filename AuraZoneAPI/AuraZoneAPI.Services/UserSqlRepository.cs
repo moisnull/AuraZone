@@ -40,6 +40,18 @@ namespace AuraZoneAPI.Services
             _dataContext.Users.Add(user);
             _dataContext.SaveChanges();
         }
+        public void AddUserVideo(User user, Video video)
+        {
+            user.Videos.Add(video);
+            _dataContext.Users.Update(user);
+            _dataContext.SaveChanges();
+        }
+        public void AddUserComment(User user, Comment comment)
+        {
+            user.Comments.Add(comment);
+            _dataContext.Users.Update(user);
+            _dataContext.SaveChanges();
+        }
         public void UpdateUser(User user)
         {
             _dataContext.Users.Update(user);
@@ -50,9 +62,21 @@ namespace AuraZoneAPI.Services
             User user = GetById(id);
             if (user != null)
             {
+                List<Video> videos = _dataContext.Videos.Where(v => v.UserId == id).ToList();
+                List<Comment> comments = _dataContext.Comments.Where(c => c.UserId == id).ToList();
+                _dataContext.Videos.RemoveRange(videos);
+                _dataContext.Comments.RemoveRange(comments);
                 _dataContext.Users.Remove(user);
                 _dataContext.SaveChanges();
             }
+        }
+        public void DeleteUserVideo(User user, Video video)
+        {
+            user?.Videos.Remove(video);
+        }
+        public void DeleteUserComment(User user, Comment comment)
+        {
+            user?.Comments.Remove(comment);
         }
     }
 }

@@ -24,17 +24,15 @@ namespace AuraZoneAPI.DataAccess.ModelsConfigurations
                    .HasDefaultValueSql("GETDATE()")
                    .IsRequired();
 
-            // Foreign key to Video
             builder.HasOne(x => x.Video)
                    .WithMany(x => x.Comments)
                    .HasForeignKey(x => x.VideoId)
-                   .OnDelete(DeleteBehavior.Restrict);  // Prevent cascading delete from Video to Comments
+                   .OnDelete(DeleteBehavior.NoAction);
 
-            // Foreign key to User
             builder.HasOne(x => x.User)
                    .WithMany(x => x.Comments)
                    .HasForeignKey(x => x.UserId)
-                   .OnDelete(DeleteBehavior.Restrict);  // Prevent cascading delete from User to Comments
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

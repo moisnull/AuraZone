@@ -27,7 +27,11 @@ namespace AuraZoneAPI.Services
         }
         public IQueryable<Video> GetAllUserVideos(Guid userId)
         {
-            return (IQueryable<Video>)_dataContext.Videos.Select(d => d.User.Id == userId);
+            return _dataContext.Videos.Where(d => d.User.Id == userId);
+        }
+        public bool VideoExists(Guid id)
+        {
+            return _dataContext.Videos.Any(d => d.Id == id);
         }
         public void AddVideo(Guid userId, Video video)
         {
@@ -39,6 +43,12 @@ namespace AuraZoneAPI.Services
             user.Videos.Add(video);
             _dataContext.Videos.Add(video);
             _dataContext.Users.Update(user);
+            _dataContext.SaveChanges();
+        }
+        public void AddVideoComment(Video video, Comment comment)
+        {
+            video.Comments.Add(comment);
+            _dataContext.Videos.Update(video);
             _dataContext.SaveChanges();
         }
         public void UpdateVideo(Guid id)
